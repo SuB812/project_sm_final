@@ -18,117 +18,69 @@ st.set_page_config(
 st.markdown("""
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css">
 <style>
-
-/* ── 전역 ── */
-*, *::before, *::after { box-sizing: border-box; }
+* { box-sizing: border-box; }
 html, body, [class*="css"] {
     font-family: 'Pretendard', -apple-system, sans-serif !important;
 }
-
-/* ── 모바일 컨테이너 ── */
 .block-container {
     max-width: 420px !important;
     padding: 1.5rem 1rem 6rem !important;
     margin: 0 auto !important;
 }
 
-/* ── Streamlit 기본 버튼 ── */
+/* 버튼 */
 .stButton > button {
     width: 100% !important;
     font-family: 'Pretendard', sans-serif !important;
-    font-weight: 600 !important;
+    font-weight: 700 !important;
     border-radius: 10px !important;
+    letter-spacing: 0.2px !important;
 }
 .stButton > button[kind="primary"] {
-    background: linear-gradient(135deg, #0C447C 0%, #185FA5 50%, #378ADD 100%) !important;
+    background: linear-gradient(135deg, #0C447C 0%, #185FA5 55%, #378ADD 100%) !important;
     border: none !important;
     color: #fff !important;
+    font-size: 15px !important;
 }
 
-/* ── 홈 화면 ── */
-.home-wrap {
-    min-height: 65vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+/* 홈 */
+.home-hero {
+    background: linear-gradient(160deg, #042C53 0%, #0C447C 38%, #185FA5 68%, #378ADD 100%);
+    border-radius: 16px;
+    padding: 52px 24px 48px;
     text-align: center;
-    padding: 40px 0 32px;
-    position: relative;
-}
-.home-gradient-bg {
-    position: fixed;
-    top: 0; left: 0; right: 0;
-    height: 55vh;
-    background: linear-gradient(160deg, #042C53 0%, #0C447C 40%, #185FA5 70%, #378ADD 100%);
-    z-index: -1;
-    pointer-events: none;
-}
-.home-gradient-bg::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background:
-        radial-gradient(circle at 20% 25%, rgba(255,255,255,0.12) 0%, transparent 40%),
-        radial-gradient(circle at 80% 65%, rgba(255,255,255,0.07) 0%, transparent 35%),
-        radial-gradient(circle at 55% 10%, rgba(183,220,255,0.14) 0%, transparent 30%);
+    margin-bottom: 20px;
+    overflow: hidden;
 }
 .home-sub {
     font-size: 12px;
     font-weight: 300;
     color: rgba(183,220,255,0.85);
     letter-spacing: 0.5px;
-    margin-bottom: 8px;
+    margin: 0 0 10px;
 }
 .home-title {
-    font-size: 42px;
+    font-size: 44px;
     font-weight: 800;
-    color: #ffffff;
+    color: #fff;
     letter-spacing: -1px;
     line-height: 1.05;
-    margin-bottom: 6px;
+    margin: 0 0 6px;
 }
-.home-title-light {
-    font-weight: 300;
-    color: rgba(183,220,255,0.8);
-}
+.home-title-light { font-weight: 300; color: rgba(183,220,255,0.8); }
 .home-divider {
-    width: 28px;
-    height: 1.5px;
+    width: 28px; height: 1.5px;
     background: rgba(255,255,255,0.3);
     border-radius: 2px;
-    margin: 16px auto 48px;
+    margin: 14px auto 0;
 }
-.sparkle {
-    position: fixed;
-    border-radius: 50%;
-    background: rgba(255,255,255,0.55);
-    pointer-events: none;
-    z-index: -1;
-}
-.sp1 { width: 3px; height: 3px; top: 10%; left: 22%; }
-.sp2 { width: 2px; height: 2px; top: 20%; left: 78%; }
-.sp3 { width: 3px; height: 3px; top: 35%; left: 12%; }
-.sp4 { width: 2px; height: 2px; top: 42%; left: 70%; }
-.sp5 { width: 4px; height: 4px; top: 8%;  left: 58%; opacity: 0.4; }
-.sp6 { width: 2px; height: 2px; top: 48%; left: 40%; }
-.sp7 { width: 3px; height: 3px; top: 28%; left: 88%; opacity: 0.5; }
 
-/* ── 결과 헤더 ── */
+/* 결과 헤더 */
 .risk-header {
     background: linear-gradient(135deg, #042C53 0%, #185FA5 100%);
     border-radius: 12px;
     padding: 16px;
     margin-bottom: 16px;
-    position: relative;
-    overflow: hidden;
-}
-.risk-header::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: radial-gradient(circle at 80% 20%, rgba(255,255,255,0.1) 0%, transparent 50%);
-    border-radius: 12px;
 }
 .risk-level-badge {
     display: inline-flex;
@@ -150,128 +102,76 @@ html, body, [class*="css"] {
     color: rgba(183,220,255,0.85);
     line-height: 1.6;
     font-family: 'Pretendard', sans-serif;
+    margin: 0;
 }
 
-/* ── 리스크 카드 ── */
+/* 리스크 카드 */
 .card-high {
-    border: 0.5px solid #ffd0d0;
-    border-radius: 10px;
-    padding: 12px 14px;
-    background: #fff1f1;
-    margin-bottom: 8px;
+    border: 0.5px solid #ffd0d0; border-radius: 10px;
+    padding: 12px 14px; background: #fff1f1; margin-bottom: 8px;
 }
 .card-mid {
-    border: 0.5px solid #ffe5a0;
-    border-radius: 10px;
-    padding: 12px 14px;
-    background: #fffbf0;
-    margin-bottom: 8px;
+    border: 0.5px solid #ffe5a0; border-radius: 10px;
+    padding: 12px 14px; background: #fffbf0; margin-bottom: 8px;
 }
 .card-low {
-    border: 0.5px solid #C0DD97;
-    border-radius: 10px;
-    padding: 12px 14px;
-    background: #EAF3DE;
-    margin-bottom: 8px;
+    border: 0.5px solid #C0DD97; border-radius: 10px;
+    padding: 12px 14px; background: #EAF3DE; margin-bottom: 8px;
 }
 .card-neutral {
-    border: 0.5px solid rgba(24,95,165,0.12);
-    border-radius: 10px;
-    padding: 12px 14px;
-    background: #f8faff;
-    margin-bottom: 8px;
+    border: 0.5px solid rgba(24,95,165,0.12); border-radius: 10px;
+    padding: 12px 14px; background: #f8faff; margin-bottom: 8px;
 }
 .badge-blue {
-    font-size: 11px;
-    font-weight: 600;
-    padding: 2px 8px;
+    font-size: 11px; font-weight: 600; padding: 2px 8px;
     border-radius: 20px;
     background: linear-gradient(135deg, #E6F1FB, #d0e8ff);
-    color: #0C447C;
-    display: inline-block;
-    margin-bottom: 6px;
-    font-family: 'Pretendard', sans-serif;
+    color: #0C447C; display: inline-block; margin-bottom: 6px;
 }
 
-/* ── 채팅 말풍선 ── */
+/* 채팅 말풍선 */
 .bubble-user {
     background: linear-gradient(135deg, #0C447C, #185FA5);
-    color: #fff;
-    border-radius: 16px 16px 4px 16px;
-    padding: 10px 14px;
-    margin: 6px 0 6px 15%;
-    font-size: 14px;
-    font-weight: 400;
-    line-height: 1.6;
-    font-family: 'Pretendard', sans-serif;
+    color: #fff; border-radius: 16px 16px 4px 16px;
+    padding: 10px 14px; margin: 6px 0 6px 15%;
+    font-size: 14px; font-weight: 400; line-height: 1.6;
 }
 .bubble-bot {
     background: #f0f4ff;
     border: 0.5px solid rgba(24,95,165,0.12);
-    color: #1a2340;
-    border-radius: 16px 16px 16px 4px;
-    padding: 10px 14px;
-    margin: 6px 15% 6px 0;
-    font-size: 14px;
-    font-weight: 300;
-    line-height: 1.6;
-    font-family: 'Pretendard', sans-serif;
+    color: #1a2340; border-radius: 16px 16px 16px 4px;
+    padding: 10px 14px; margin: 6px 15% 6px 0;
+    font-size: 14px; font-weight: 300; line-height: 1.6;
 }
 
-/* ── 이력 헤더 ── */
+/* 이력 헤더 */
 .hist-header {
     background: linear-gradient(135deg, #0C447C, #185FA5);
-    border-radius: 12px;
-    padding: 16px;
-    margin-bottom: 16px;
-    position: relative;
-    overflow: hidden;
-}
-.hist-header::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: radial-gradient(circle at 20% 60%, rgba(255,255,255,0.08) 0%, transparent 50%);
+    border-radius: 12px; padding: 16px; margin-bottom: 16px;
 }
 .hist-header-title {
-    font-size: 18px;
-    font-weight: 800;
-    color: #fff;
+    font-size: 18px; font-weight: 800; color: #fff;
     font-family: 'Pretendard', sans-serif;
-    position: relative;
-    z-index: 1;
 }
 .hist-header-sub {
-    font-size: 12px;
-    font-weight: 300;
-    color: rgba(183,220,255,0.8);
-    margin-top: 2px;
-    font-family: 'Pretendard', sans-serif;
-    position: relative;
-    z-index: 1;
+    font-size: 12px; font-weight: 300;
+    color: rgba(183,220,255,0.8); margin-top: 2px;
 }
 .hist-item {
-    display: flex;
-    align-items: center;
-    gap: 10px;
+    display: flex; align-items: center; gap: 10px;
     padding: 10px 12px;
     border: 0.5px solid rgba(24,95,165,0.1);
-    border-radius: 10px;
-    margin-bottom: 7px;
-    background: #f8faff;
+    border-radius: 10px; margin-bottom: 7px; background: #f8faff;
 }
 .hdot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
 .hdot-high { background: #E24B4A; }
 .hdot-mid  { background: #EF9F27; }
 .hdot-ok   { background: #1D9E75; }
 
-/* ── 구분선 ── */
 hr { margin: 0.5rem 0 !important; }
-
 </style>
 """, unsafe_allow_html=True)
 
-# ──────────────────────────────────────────────────────
 # Session state 초기화
 # ──────────────────────────────────────────────────────
 _defaults = {
@@ -669,12 +569,7 @@ def bottom_nav():
 # ──────────────────────────────────────────────────────
 def page_home():
     st.markdown("""
-    <div class="home-gradient-bg"></div>
-    <div class="sparkle sp1"></div><div class="sparkle sp2"></div>
-    <div class="sparkle sp3"></div><div class="sparkle sp4"></div>
-    <div class="sparkle sp5"></div><div class="sparkle sp6"></div>
-    <div class="sparkle sp7"></div>
-    <div class="home-wrap">
+    <div class="home-hero">
       <p class="home-sub">온라인 마케팅 리스크 진단 도우미</p>
       <h1 class="home-title">Ad<span class="home-title-light">Doctor</span></h1>
       <div class="home-divider"></div>
