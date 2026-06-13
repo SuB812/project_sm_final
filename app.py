@@ -16,30 +16,155 @@ st.set_page_config(
 )
 
 st.markdown("""
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css">
 <style>
-/* 모바일 비율 컨테이너 */
+
+/* ── 전역 ── */
+*, *::before, *::after { box-sizing: border-box; }
+html, body, [class*="css"] {
+    font-family: 'Pretendard', -apple-system, sans-serif !important;
+}
+
+/* ── 모바일 컨테이너 ── */
 .block-container {
     max-width: 420px !important;
     padding: 1.5rem 1rem 6rem !important;
     margin: 0 auto !important;
 }
-/* 하단 네비게이션 */
-div[data-testid="stHorizontalBlock"].nav-row > div {
-    padding: 0 2px !important;
+
+/* ── Streamlit 기본 버튼 ── */
+.stButton > button {
+    width: 100% !important;
+    font-family: 'Pretendard', sans-serif !important;
+    font-weight: 600 !important;
+    border-radius: 10px !important;
 }
-/* 리스크 카드 */
+.stButton > button[kind="primary"] {
+    background: linear-gradient(135deg, #0C447C 0%, #185FA5 50%, #378ADD 100%) !important;
+    border: none !important;
+    color: #fff !important;
+}
+
+/* ── 홈 화면 ── */
+.home-wrap {
+    min-height: 65vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 40px 0 32px;
+    position: relative;
+}
+.home-gradient-bg {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    height: 55vh;
+    background: linear-gradient(160deg, #042C53 0%, #0C447C 40%, #185FA5 70%, #378ADD 100%);
+    z-index: -1;
+    pointer-events: none;
+}
+.home-gradient-bg::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(circle at 20% 25%, rgba(255,255,255,0.12) 0%, transparent 40%),
+        radial-gradient(circle at 80% 65%, rgba(255,255,255,0.07) 0%, transparent 35%),
+        radial-gradient(circle at 55% 10%, rgba(183,220,255,0.14) 0%, transparent 30%);
+}
+.home-sub {
+    font-size: 12px;
+    font-weight: 300;
+    color: rgba(183,220,255,0.85);
+    letter-spacing: 0.5px;
+    margin-bottom: 8px;
+}
+.home-title {
+    font-size: 42px;
+    font-weight: 800;
+    color: #ffffff;
+    letter-spacing: -1px;
+    line-height: 1.05;
+    margin-bottom: 6px;
+}
+.home-title-light {
+    font-weight: 300;
+    color: rgba(183,220,255,0.8);
+}
+.home-divider {
+    width: 28px;
+    height: 1.5px;
+    background: rgba(255,255,255,0.3);
+    border-radius: 2px;
+    margin: 16px auto 48px;
+}
+.sparkle {
+    position: fixed;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.55);
+    pointer-events: none;
+    z-index: -1;
+}
+.sp1 { width: 3px; height: 3px; top: 10%; left: 22%; }
+.sp2 { width: 2px; height: 2px; top: 20%; left: 78%; }
+.sp3 { width: 3px; height: 3px; top: 35%; left: 12%; }
+.sp4 { width: 2px; height: 2px; top: 42%; left: 70%; }
+.sp5 { width: 4px; height: 4px; top: 8%;  left: 58%; opacity: 0.4; }
+.sp6 { width: 2px; height: 2px; top: 48%; left: 40%; }
+.sp7 { width: 3px; height: 3px; top: 28%; left: 88%; opacity: 0.5; }
+
+/* ── 결과 헤더 ── */
+.risk-header {
+    background: linear-gradient(135deg, #042C53 0%, #185FA5 100%);
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 16px;
+    position: relative;
+    overflow: hidden;
+}
+.risk-header::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 80% 20%, rgba(255,255,255,0.1) 0%, transparent 50%);
+    border-radius: 12px;
+}
+.risk-level-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255,255,255,0.15);
+    border: 0.5px solid rgba(255,255,255,0.3);
+    border-radius: 20px;
+    padding: 4px 12px;
+    font-size: 13px;
+    font-weight: 700;
+    font-family: 'Pretendard', sans-serif;
+    color: #fff;
+    margin-bottom: 8px;
+}
+.risk-summary {
+    font-size: 13px;
+    font-weight: 300;
+    color: rgba(183,220,255,0.85);
+    line-height: 1.6;
+    font-family: 'Pretendard', sans-serif;
+}
+
+/* ── 리스크 카드 ── */
 .card-high {
-    border: 0.5px solid #F7C1C1;
+    border: 0.5px solid #ffd0d0;
     border-radius: 10px;
     padding: 12px 14px;
-    background: #FCEBEB;
+    background: #fff1f1;
     margin-bottom: 8px;
 }
 .card-mid {
-    border: 0.5px solid #FAC775;
+    border: 0.5px solid #ffe5a0;
     border-radius: 10px;
     padding: 12px 14px;
-    background: #FAEEDA;
+    background: #fffbf0;
     margin-bottom: 8px;
 }
 .card-low {
@@ -50,60 +175,99 @@ div[data-testid="stHorizontalBlock"].nav-row > div {
     margin-bottom: 8px;
 }
 .card-neutral {
-    border: 0.5px solid #e0e0e0;
+    border: 0.5px solid rgba(24,95,165,0.12);
     border-radius: 10px;
     padding: 12px 14px;
-    background: #f8f9fa;
+    background: #f8faff;
     margin-bottom: 8px;
 }
 .badge-blue {
     font-size: 11px;
+    font-weight: 600;
     padding: 2px 8px;
     border-radius: 20px;
-    background: #E6F1FB;
-    color: #185FA5;
+    background: linear-gradient(135deg, #E6F1FB, #d0e8ff);
+    color: #0C447C;
     display: inline-block;
     margin-bottom: 6px;
+    font-family: 'Pretendard', sans-serif;
 }
-/* 채팅 말풍선 */
+
+/* ── 채팅 말풍선 ── */
 .bubble-user {
-    background: #185FA5;
-    color: white;
+    background: linear-gradient(135deg, #0C447C, #185FA5);
+    color: #fff;
     border-radius: 16px 16px 4px 16px;
     padding: 10px 14px;
     margin: 6px 0 6px 15%;
     font-size: 14px;
-    line-height: 1.5;
+    font-weight: 400;
+    line-height: 1.6;
+    font-family: 'Pretendard', sans-serif;
 }
 .bubble-bot {
-    background: #f1f3f5;
-    color: #1a1a1a;
+    background: #f0f4ff;
+    border: 0.5px solid rgba(24,95,165,0.12);
+    color: #1a2340;
     border-radius: 16px 16px 16px 4px;
     padding: 10px 14px;
     margin: 6px 15% 6px 0;
     font-size: 14px;
-    line-height: 1.5;
+    font-weight: 300;
+    line-height: 1.6;
+    font-family: 'Pretendard', sans-serif;
 }
-/* 홈 중앙 정렬 */
-.home-center {
-    min-height: 60vh;
+
+/* ── 이력 헤더 ── */
+.hist-header {
+    background: linear-gradient(135deg, #0C447C, #185FA5);
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 16px;
+    position: relative;
+    overflow: hidden;
+}
+.hist-header::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 20% 60%, rgba(255,255,255,0.08) 0%, transparent 50%);
+}
+.hist-header-title {
+    font-size: 18px;
+    font-weight: 800;
+    color: #fff;
+    font-family: 'Pretendard', sans-serif;
+    position: relative;
+    z-index: 1;
+}
+.hist-header-sub {
+    font-size: 12px;
+    font-weight: 300;
+    color: rgba(183,220,255,0.8);
+    margin-top: 2px;
+    font-family: 'Pretendard', sans-serif;
+    position: relative;
+    z-index: 1;
+}
+.hist-item {
     display: flex;
-    flex-direction: column;
     align-items: center;
-    justify-content: center;
-    text-align: center;
-    padding: 40px 0;
+    gap: 10px;
+    padding: 10px 12px;
+    border: 0.5px solid rgba(24,95,165,0.1);
+    border-radius: 10px;
+    margin-bottom: 7px;
+    background: #f8faff;
 }
-/* 구분선 위 여백 제거 */
+.hdot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.hdot-high { background: #E24B4A; }
+.hdot-mid  { background: #EF9F27; }
+.hdot-ok   { background: #1D9E75; }
+
+/* ── 구분선 ── */
 hr { margin: 0.5rem 0 !important; }
-/* 버튼 전체 너비 강제 */
-.stButton > button { width: 100% !important; }
-/* primary 버튼 색상 */
-.stButton > button[kind="primary"] {
-    background-color: #185FA5 !important;
-    border: none !important;
-    border-radius: 8px !important;
-}
+
 </style>
 """, unsafe_allow_html=True)
 
@@ -505,9 +669,15 @@ def bottom_nav():
 # ──────────────────────────────────────────────────────
 def page_home():
     st.markdown("""
-    <div class="home-center">
-      <p style="font-size:13px;color:#888;margin:0 0 8px;">온라인 마케팅 리스크 진단 도우미</p>
-      <h1 style="font-size:38px;font-weight:500;color:#1a1a1a;margin:0 0 48px;">Ad Doctor</h1>
+    <div class="home-gradient-bg"></div>
+    <div class="sparkle sp1"></div><div class="sparkle sp2"></div>
+    <div class="sparkle sp3"></div><div class="sparkle sp4"></div>
+    <div class="sparkle sp5"></div><div class="sparkle sp6"></div>
+    <div class="sparkle sp7"></div>
+    <div class="home-wrap">
+      <p class="home-sub">온라인 마케팅 리스크 진단 도우미</p>
+      <h1 class="home-title">Ad<span class="home-title-light">Doctor</span></h1>
+      <div class="home-divider"></div>
     </div>
     """, unsafe_allow_html=True)
     if st.button("시작하기", type="primary", use_container_width=True):
@@ -563,14 +733,14 @@ def page_result():
     level   = result.get("risk_level", "알 수 없음")
     summary = result.get("summary", "")
 
-    # 리스크 레벨
+    # 리스크 레벨 헤더 (그라데이션 카드)
     st.markdown(
-        f"{dot_html(level, 12)}"
-        f"<span style='font-size:18px;font-weight:500;vertical-align:middle;'>{level}</span>",
-        unsafe_allow_html=True,
-    )
-    st.markdown(
-        f"<p style='font-size:14px;color:#555;margin:8px 0 20px;line-height:1.6;'>{summary}</p>",
+        f"""<div class="risk-header">
+          <div class="risk-level-badge">
+            {dot_html(level, 8)}{level}
+          </div>
+          <p class="risk-summary">{summary}</p>
+        </div>""",
         unsafe_allow_html=True,
     )
 
@@ -698,7 +868,14 @@ def page_qna(law_graph, kg):
 # 화면 5 — 이력
 # ──────────────────────────────────────────────────────
 def page_history():
-    st.markdown("### 진단 이력")
+    cnt = len(load_history())
+    st.markdown(
+        f"""<div class="hist-header">
+          <div class="hist-header-title">진단 이력</div>
+          <div class="hist-header-sub">총 {cnt}건의 진단 기록</div>
+        </div>""",
+        unsafe_allow_html=True,
+    )
 
     filter_opts = ["전체", "고위험", "중위험", "저위험", "적합"]
     selected    = st.radio("필터", filter_opts, horizontal=True, label_visibility="collapsed")
